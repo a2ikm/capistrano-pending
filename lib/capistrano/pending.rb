@@ -8,6 +8,8 @@ module Capistrano
       class <<self
         def load(name)
           const_get(name.to_s.capitalize).new
+        rescue NameError
+          abort "#{name} is not supported."
         end
       end
     end
