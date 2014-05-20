@@ -9,7 +9,7 @@ namespace :deploy do
 
   namespace :pending do
     def _scm
-      Capistrano3Pending::SCM.load(fetch(:scm))
+      Capistrano::Pending::SCM.load(fetch(:scm))
     end
 
     def _log(from, to)
@@ -36,7 +36,7 @@ namespace :deploy do
     task :setup => [:capture_revision]
 
     task :capture_revision do
-      on roles fetch(:capistrano3_pending_role, :db) do |host|
+      on roles fetch(:capistrano_pending_role, :db) do |host|
         within current_path do
           set :revision, capture(:cat, "REVISION")
         end
