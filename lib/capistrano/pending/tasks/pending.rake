@@ -1,9 +1,9 @@
 namespace :deploy do
 
   desc <<-DESC
-    Displays the `diff' since your last deploy. This is useful if you want \
-    to examine what changes are about to be deployed. Note that this might \
-    not be supported on all SCM's.
+    Displays the commits since your last deploy. This is good for a summary \
+    of the changes that have occurred since the last deploy. Note that this \
+    might not be supported on all SCM's
   DESC
   task :pending => "deploy:pending:log"
 
