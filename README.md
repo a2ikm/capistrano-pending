@@ -3,6 +3,8 @@
 This gem provides `cap deploy:pending` and `cap deploy:pending:diff` to Capistrano 3.
 They were implemented in Capistrano 2.
 
+Currently only git is supported.
+
 ## Installation
 
 Add this line to your application's Gemfile:
