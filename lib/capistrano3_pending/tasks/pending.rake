@@ -8,17 +8,20 @@ namespace :deploy do
   task :pending => "deploy:pending:log"
 
   namespace :pending do
-    def git(*args)
-      args.unshift(:git)
-      local_exec(*args)
+    def _scm
+      Capistrano3Pending::SCM.load(fetch(:scm))
     end
 
-    def local_exec(*args)
-      ::Kernel.exec *args.map(&:to_s)
+    def _log(from, to)
+      _scm.log(from, to)
+    end
+
+    def _diff(from, to)
+      _scm.diff(from, to)
     end
 
     task :log => :setup do
-      git :log, "#{fetch(:revision)}..#{fetch(:branch)}"
+      _log(fetch(:revision), fetch(:branch))
     end
 
     desc <<-DESC
@@ -27,7 +30,7 @@ namespace :deploy do
       not be supported on all SCM's.
     DESC
     task :diff => :setup do
-      git :diff, "#{fetch(:revision)}..#{fetch(:branch)}"
+      _diff(fetch(:revision), fetch(:branch))
     end
 
     task :setup => [:capture_revision]
