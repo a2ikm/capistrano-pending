@@ -23,6 +23,9 @@ namespace :deploy do
     def _ensure_revision
       if test "[ -f #{current_path}/REVISION ]"
         yield
+      else
+        error "REVISION file doesn't exist"
+        exit 1
       end
     end
 
