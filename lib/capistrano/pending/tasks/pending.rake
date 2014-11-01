@@ -5,11 +5,18 @@ namespace :deploy do
     of the changes that have occurred since the last deploy. Note that this \
     might not be supported on all SCM's
   DESC
-  task :pending => "deploy:pending:log"
+  task :pending do
+    if ENV["CUSTOM"]
+      set :custom, ENV["CUSTOM"]
+      invoke "deploy:pending:custom"
+    else
+      invoke "deploy:pending:log"
+    end
+  end
 
   namespace :pending do
-    def _scm
-      Capistrano::Pending::SCM.load(fetch(:scm))
+    def _scm(name = fetch(:scm), *args)
+      Capistrano::Pending::SCM.load(name, *args)
     end
 
     def _log(from, to)
@@ -18,6 +25,10 @@ namespace :deploy do
 
     def _diff(from, to)
       _scm.diff(from, to)
+    end
+
+    def _custom(from, to)
+      _scm(:custom, fetch(:custom)).log(from, to)
     end
 
     def _ensure_revision
@@ -40,6 +51,10 @@ namespace :deploy do
     DESC
     task :diff => :setup do
       _diff(fetch(:revision), fetch(:branch))
+    end
+
+    task :custom => :setup do
+      _custom(fetch(:revision), fetch(:branch))
     end
 
     task :setup => [:capture_revision]
