@@ -5,13 +5,7 @@ namespace :deploy do
     of the changes that have occurred since the last deploy. Note that this \
     might not be supported on all SCM's
   DESC
-  task :pending do
-    on roles fetch(:capistrano_pending_role, :db) do |host|
-      if test "[ -f #{current_path}/REVISION ]"
-        invoke "deploy:pending:log"
-      end
-    end
-  end
+  task :pending => "deploy:pending:log"
 
   namespace :pending do
     def _scm
@@ -24,6 +18,12 @@ namespace :deploy do
 
     def _diff(from, to)
       _scm.diff(from, to)
+    end
+
+    def _ensure_revision
+      if test "[ -f #{current_path}/REVISION ]"
+        yield
+      end
     end
 
     task :log => :setup do
@@ -43,8 +43,10 @@ namespace :deploy do
 
     task :capture_revision do
       on roles fetch(:capistrano_pending_role, :db) do |host|
-        within current_path do
-          set :revision, capture(:cat, "REVISION")
+        _ensure_revision do
+          within current_path do
+            set :revision, capture(:cat, "REVISION")
+          end
         end
       end
     end
