@@ -7,11 +7,11 @@ module Capistrano
         command :svn
 
         def log(from, to)
-          git :log, "-r #{from}:#{to}"
+          svn :log, "-r #{from}:#{to}"
         end
 
         def diff(from, to)
-          git :diff, "-r #{from}:#{to}"
+          svn :diff, "-r #{from}:#{to}"
         end
       end
     end
