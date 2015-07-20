@@ -4,6 +4,7 @@ module Capistrano
 
     module SCM
       autoload :Git, "capistrano/pending/scm/git"
+      autoload :Svn, "capistrano/pending/scm/svn"
 
       class <<self
         def load(name)
