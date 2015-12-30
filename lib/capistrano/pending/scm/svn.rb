@@ -7,12 +7,12 @@ module Capistrano
         command :svn
 
         def log(from, to)
-          to = :HEAD if to == :master
+          to = :HEAD if to.to_sym == :master
           svn :log, "-r#{from}:#{to}"
         end
 
         def diff(from, to)
-          to = :HEAD if to == :master
+          to = :HEAD if to.to_sym == :master
           svn :diff, "-r#{from}:#{to}"
         end
       end
