@@ -9,7 +9,14 @@ namespace :deploy do
 
   namespace :pending do
     def _scm
-      Capistrano::Pending::SCM.load(fetch(:scm))
+      assumed_scm =
+        if defined?(Capistrano::SCM::Svn)
+          "svn"
+        elsif defined?(Capistrano::SCM::Git)
+          "git"
+        end
+
+      Capistrano::Pending::SCM.load(fetch(:scm, assumed_scm))
     end
 
     def _log(from, to)
